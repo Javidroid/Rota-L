@@ -1,19 +1,26 @@
+//============================================================================
+// Name        : main.cpp
+// Author      : Raúl Alvarado Díaz, Javier Florido Cartolano & Iván Sánchez Cordero
+// Version     :
+// Copyright   : Proyecto IASI 2020/21
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
 #include "Tablero.hpp"
 #include "Pieza.hpp"
 #include "LectorFicheroPuzle.hpp"
 
-#include <fstream>
-
 using namespace std;
 
 int main(int argc, char *argv[])
-{	
+{
 	/**
 	 * PRUEBA DE IDENTIFICADOR DE PIEZA
 	 * ( El constructor de LectorFicheroPuzle no debe ponerse a leer ningun fichero )
 	 **/
 	LectorFicheroPuzle * lec = LectorFicheroPuzle::getInstancia();
-	lec->cargarTableroPrueba(); 
+	lec->cargarTableroPrueba();
 	Pieza* p = lec->obtenerPieza();
 
 	/**

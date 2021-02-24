@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : LectorFicheroPuzle.hpp
+// Author      : Raúl Alvarado Díaz, Javier Florido Cartolano & Iván Sánchez Cordero
+// Version     :
+// Copyright   : Proyecto IASI 2020/21
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
 #ifndef LECTORFICHEROPUZLE_H
 #define LECTORFICHEROPUZLE_H
 

@@ -1,6 +1,11 @@
-/**
- * 	Definicion de la clase Tablero
- */
+//============================================================================
+// Name        : Tablero.hpp
+// Author      : Raúl Alvarado Díaz, Javier Florido Cartolano & Iván Sánchez Cordero
+// Version     :
+// Copyright   : Proyecto IASI 2020/21
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
 #ifndef TABLERO_H
 #define TABLERO_H
 
