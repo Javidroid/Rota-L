@@ -1,11 +1,6 @@
-//============================================================================
-// Name        : Pieza.hpp
-// Author      : Raúl Alvarado Díaz, Javier Florido Cartolano & Iván Sánchez Cordero
-// Version     :
-// Copyright   : Proyecto IASI 2020/21
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-
+/**
+ * 	Definicion de la clase Pieza
+ */
 #ifndef PIEZA_H
 #define PIEZA_H
 	
