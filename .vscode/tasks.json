@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: g++.exe compilar archivo activo",
+			"command": "D:\\Programas\\MinGW\\bin\\g++.exe",
+			"args": [
+				"-g",
+				"${workspaceFolder}\\src\\*.cpp",
+				"-O3",
+				"-static",
+				"-o",
+				"${workspaceFolder}\\ejecutable\\Rota-L.exe",
+			],
+			"options": {
+				"cwd": "D:\\Programas\\MinGW\\bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compilador: D:\\Programas\\MinGW\\bin\\g++.exe"
+		}
+	]
+}
