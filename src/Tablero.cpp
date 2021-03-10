@@ -23,8 +23,8 @@ Tablero::Tablero(int tam){
 Tablero::Tablero(int tam, tableroMatriz matriz){
 	n = tam;
     // Copiar matriz
-    for(int i = 1; i < n-1; i++)
-	    for(int j = 1; j < n-1; j++)
+    for(int i = 0; i < n; i++)
+	    for(int j = 0; j < n; j++)
 		    tableroFijo[i][j] = matriz[i][j];
 }
 
@@ -42,21 +42,21 @@ void Tablero::test_fijarObstaculosPrueba(){
 void Tablero::limpiar(){
     for(int i = 0; i < n; i++)
 	    for(int j = 0; j < n; j++)
-		    tableroDinamico[i][j] = tableroFijo[i][j];
+		    tableroDibujable[i][j] = tableroFijo[i][j];
 }
 
 void Tablero::aplicarPieza(const Pieza &p){
 	int desplz;
 
 	// Dibujemos el vertice
-	tableroDinamico[p.getOrigenY()][p.getOrigenX()] = CASILLA_PIEZA;
+	tableroDibujable[p.getOrigenY()][p.getOrigenX()] = CASILLA_PIEZA;
 
 	// Aplica la parte horizontal de la L (x, columnas)
 	// -> Vamos a suponer que POSITIVO: derecha y NEGATIVO: izquierda (como se ha hecho siempre xd)
 	int horizontal = abs(p.getAncho());
 	for(int h = 1; h <= horizontal; h++){
 		desplz = (p.getAncho() > 0) ? h : -h; // Hacia donde dibujar...? Izquierda o derecha...?
-		tableroDinamico[p.getOrigenY()][p.getOrigenX() + desplz] = CASILLA_PIEZA;
+		tableroDibujable[p.getOrigenY()][p.getOrigenX() + desplz] = CASILLA_PIEZA;
 	}
 
 	// Aplica la parte vertical de la L
@@ -64,7 +64,7 @@ void Tablero::aplicarPieza(const Pieza &p){
 	int vertical = abs(p.getAlto());
 	for(int v = 1; v <= vertical; v++){
 		desplz = (p.getAlto() > 0) ? v : -v; // Hacia donde dibujar...? Arriba o abajo...?
-		tableroDinamico[p.getOrigenY() - desplz][p.getOrigenX()] = CASILLA_PIEZA; // El - para que se dibuje como hemos dicho >:v
+		tableroDibujable[p.getOrigenY() - desplz][p.getOrigenX()] = CASILLA_PIEZA; // El - para que se dibuje como hemos dicho >:v
 	}
 }
 
@@ -144,7 +144,7 @@ bool Tablero::chocaAlRotar(const Pieza &p){
 void Tablero::dibujar(){
 	for(int i = 0; i< n; i++){
 		for(int j = 0; j < n; j++){
-			std::cout << tableroDinamico[i][j] << ' ';
+			std::cout << tableroDibujable[i][j] << ' ';
 		}
 		std::cout << std::endl;
 	}

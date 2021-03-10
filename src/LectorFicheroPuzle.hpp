@@ -14,6 +14,7 @@ private:
 	int tamanoTablero;
 	Pieza * pieza;
 	tableroMatriz tableroLeido;
+	Tablero * tablero;
 
 	LectorFicheroPuzle();
 
@@ -21,11 +22,8 @@ private:
 public:
 	static LectorFicheroPuzle * getInstancia();
 	~LectorFicheroPuzle();
-
 	Tablero* obtenerTablero();
-
 	Pieza* obtenerPieza();
-
 	void cargarTableroPrueba();
 
 };

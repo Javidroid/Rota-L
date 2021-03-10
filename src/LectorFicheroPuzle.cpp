@@ -11,12 +11,10 @@ LectorFicheroPuzle::LectorFicheroPuzle(){
 	tamanoTablero = 10; // Siempre va a ser 10 en todos los ficheros???
 	pieza = nullptr;
 
-	/**
-	 * Parte quitada para probar identificador de pieza
 	std::ifstream in(FICHERO_PUZLE_NOMBRE, std::ifstream::in);
 	std::string line;
-
-	if(in.is_open()){
+	if(!in.fail()){
+		std::cout << "Leyendo fichero " << FICHERO_PUZLE_NOMBRE << " ..." << std::endl;
 		for(int i=0;i<tamanoTablero;i++){
 			for(int j=0;j<tamanoTablero;j++){
 				getline(in,line,',');
@@ -24,15 +22,22 @@ LectorFicheroPuzle::LectorFicheroPuzle(){
 			}
 		}
 		in.close();
-	}*/
+	}else{
+		std::cout << "[ERROR]: No se ha podido leer " << FICHERO_PUZLE_NOMBRE << std::endl;
+		std::terminate();
+	}
+
+	// Preparar los elementos Tablero y Pieza que se obtienen con los getters
+	tablero = new Tablero(tamanoTablero, tableroLeido);
+	identificarPieza();	
 }
 
 Tablero* LectorFicheroPuzle::obtenerTablero(){
-	return new Tablero(tamanoTablero, tableroLeido);
+	return tablero;
 }
 
 Pieza* LectorFicheroPuzle::obtenerPieza(){
-	if(pieza == nullptr) identificarPieza();
+	//if(pieza == nullptr) identificarPieza();
 	return pieza;
 }
 

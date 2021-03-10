@@ -13,32 +13,23 @@ int main(int argc, char *argv[])
 	 * ( El constructor de LectorFicheroPuzle no debe ponerse a leer ningun fichero )
 	 **/
 	LectorFicheroPuzle * lec = LectorFicheroPuzle::getInstancia();
-	lec->cargarTableroPrueba(); 
 	Pieza* p = lec->obtenerPieza();
 
-	/**
-	 * PRUEBA DE ROTACIONES
-	Pieza p(1, 5,
-		  2, 1);
-	Tablero t(7);
-
-	// Prueba
-	t.test_fijarObstaculosPrueba();
-
-	t.dibujar(p);
+	Tablero *t = lec->obtenerTablero();
+	t->dibujar(*p);
 
 	// Hacer un giro completo paso a paso
-	int r = 1;
+	int r; // Fases de la rotacion
 	for(r = 1; r <= 4; r++){
-		if(t.piezaRotable(p)) p.rotar();
+		if(t->piezaRotable(*p)) p->rotar();
 		else { cout << "No puede hacer la rotacion numero " << r << endl; break; }
 
 		cout << "------------------" << endl;
-		t.dibujar(p);
+		t->dibujar(*p);
 	}
 
 	if(r > 4) cout << endl << "Se ha podido hacer una rotacion completa con esta configuracion :O" << endl;
-	**/
+	
 	return 0;
 
 }

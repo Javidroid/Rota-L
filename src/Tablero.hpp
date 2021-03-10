@@ -22,7 +22,7 @@ class Tablero  {
 private:
 	int n;
 	tableroMatriz tableroFijo; // Contiene la disposicion de los obstaculos cargada al leer el fichero.
-	tableroMatriz tableroDinamico; // Se dibujaran las posicion de L y META en este tablero
+	tableroMatriz tableroDibujable; // Se dibujaran las posicion de L y META en este tablero
 public:
 	Tablero(int tam);
 	Tablero(int tam, tableroMatriz matriz);
@@ -89,8 +89,16 @@ public:
 	//	bool posicionPosible(const Pieza &p);
 	//	X -> Descarto la implementacion de este metodo porque comprobar que las transformaciones son validas antes de aplicarlas sera mas eficiente.
 
+	/**
+	 * Muestra el tablero DIBUJABLE por pantalla. Debe haberse llamado previamente a limpiar() para que el tablero dibujable tenga la base del tablero.
+	 * Opcionalmente puede llamarse a aplicarPieza() si quiere dibujarse tambien
+	 */
 	void dibujar();
-	void dibujar(const Pieza &p); // Tambien tomar capa de obstaculos
+
+	/**
+	 * Dibuja el tablero con sus obstaculos, la pieza y la meta. No necesita llamadas previas
+	 */
+	void dibujar(const Pieza &p);
 
 
 };
