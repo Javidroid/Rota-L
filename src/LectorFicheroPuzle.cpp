@@ -1,9 +1,9 @@
 #include "LectorFicheroPuzle.hpp"  
-LectorFicheroPuzle * LectorFicheroPuzle::instancia = nullptr;
+LectorFicheroPuzle * LectorFicheroPuzle::singleton = nullptr;
 
-LectorFicheroPuzle *LectorFicheroPuzle::getInstancia(){
-    if(instancia == nullptr) instancia = new LectorFicheroPuzle();
-    return instancia;
+LectorFicheroPuzle *LectorFicheroPuzle::getSingleton(){
+    if(singleton == nullptr) singleton = new LectorFicheroPuzle();
+    return singleton;
 }
 
 LectorFicheroPuzle::LectorFicheroPuzle(){
@@ -66,7 +66,7 @@ void LectorFicheroPuzle::identificarPieza(){
 		}
 	}
 
-	if(!paloHorizontalEncontrado){//if(coordenadaPaloHorizontal == -1){
+	if(!paloHorizontalEncontrado){
 		std::cout << "[DEBUG] El palo horizontal de la L no se ha encontrado. Tablero incorrecto ??" << std::endl;
 		std::terminate();
 	}
@@ -75,8 +75,8 @@ void LectorFicheroPuzle::identificarPieza(){
 	while(tableroLeido[coordenadaPaloHorizontal]	// Mantenerse en la misma fila: coordenada palo horizontal
 					  [candidatoCoordenadaPaloVertical] == CASILLA_PIEZA){	// Ir comprobando las columnas: distintas coordenadas palo vertical
 
-		if(tableroLeido[coordenadaPaloHorizontal+1][candidatoCoordenadaPaloVertical] == CASILLA_PIEZA || // Hay mas pieza arriba ??
-							tableroLeido[coordenadaPaloHorizontal-1][candidatoCoordenadaPaloVertical] == CASILLA_PIEZA){ // Hay mas pieza abajo ??
+		if(tableroLeido[coordenadaPaloHorizontal-1][candidatoCoordenadaPaloVertical] == CASILLA_PIEZA || // Hay mas pieza arriba ??
+							tableroLeido[coordenadaPaloHorizontal+1][candidatoCoordenadaPaloVertical] == CASILLA_PIEZA){ // Hay mas pieza abajo ??
 			// Se ha encontrado el palo vertical: es candidatoCoordenadaPaloVertical (coordenada X del vertice)
 			coordenadaPaloVertical = candidatoCoordenadaPaloVertical;
 			break;
@@ -106,11 +106,11 @@ void LectorFicheroPuzle::identificarPieza(){
 	anchoPieza = indiceAncho - signoAncho; // Como el indice contiene la casilla SIGUIENTE a la ultima, quitar una casilla
 
 	// Determinar alto
-		// Determinar signo de alto (recordar que y positiva es hacia ARRIBA)
-		int signoAlto = (tableroLeido[coordenadaPaloHorizontal-1][coordenadaPaloVertical] == CASILLA_PIEZA) ? 1 : -1;
+		// Determinar signo de alto
+		int signoAlto = (tableroLeido[coordenadaPaloHorizontal+1][coordenadaPaloVertical] == CASILLA_PIEZA) ? 1 : -1;
 		// Explorar alto de la pieza
 		int indiceAlto = 0;
-		while(tableroLeido[coordenadaPaloHorizontal - indiceAlto][coordenadaPaloVertical] == CASILLA_PIEZA){
+		while(tableroLeido[coordenadaPaloHorizontal + indiceAlto][coordenadaPaloVertical] == CASILLA_PIEZA){
 			indiceAlto += signoAlto;
 		}
 	altoPieza = indiceAlto - signoAlto; // Como el indice contiene la casilla SIGUIENTE a la ultima, quitar una casilla
@@ -172,4 +172,6 @@ void LectorFicheroPuzle::cargarTableroPrueba(){
 			tableroLeido[i][j] = matriz[i][j];
 }
 	
-LectorFicheroPuzle::~LectorFicheroPuzle(){delete pieza;}
+LectorFicheroPuzle::~LectorFicheroPuzle(){
+	singleton = nullptr;
+}

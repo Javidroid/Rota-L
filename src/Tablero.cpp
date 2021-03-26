@@ -42,7 +42,7 @@ void Tablero::test_fijarObstaculosPrueba(){
 void Tablero::limpiar(){
     for(int i = 0; i < n; i++)
 	    for(int j = 0; j < n; j++)
-		    tableroDibujable[i][j] = tableroFijo[i][j];
+		   tableroDibujable[i][j] = (tableroFijo[i][j] == CASILLA_PIEZA) ? CASILLA_VACIA : tableroFijo[i][j];
 }
 
 void Tablero::aplicarPieza(const Pieza &p){
@@ -64,24 +64,64 @@ void Tablero::aplicarPieza(const Pieza &p){
 	int vertical = abs(p.getAlto());
 	for(int v = 1; v <= vertical; v++){
 		desplz = (p.getAlto() > 0) ? v : -v; // Hacia donde dibujar...? Arriba o abajo...?
-		tableroDibujable[p.getOrigenY() - desplz][p.getOrigenX()] = CASILLA_PIEZA; // El - para que se dibuje como hemos dicho >:v
+		tableroDibujable[p.getOrigenY() + desplz][p.getOrigenX()] = CASILLA_PIEZA;
 	}
 }
 
-bool Tablero::piezaRotable(const Pieza &p){
+bool Tablero::hayObstaculo(int x, int y) const {
+	return tableroFijo[y][x] == CASILLA_MURO;
+}
+
+bool Tablero::posicionPosible(const Pieza &p) const {
+	return posicionPosible(p.getOrigenX(), p.getOrigenY(), p.getAncho(), p.getAlto());
+}
+
+bool Tablero::posicionPosible(int origenX, int origenY, int ancho, int alto) const {
+	if(hayObstaculo(origenX, origenY)) return false; // No se puede colocar el vertice
+
+	int coordenadaIterada, signoCoordenadaIterada; 
+
+	// Evaluar ancho de la L
+	signoCoordenadaIterada = (ancho > 0) ? 1 : -1;
+	coordenadaIterada = 1;
+
+	while(coordenadaIterada <= abs(ancho)){
+		if(hayObstaculo(origenX + coordenadaIterada*signoCoordenadaIterada, origenY)) return false;
+		coordenadaIterada++;
+	}
+	
+	// Evaluar alto de la L
+	signoCoordenadaIterada = (alto > 0) ? 1 : -1;
+	coordenadaIterada = 1;
+	
+	while(coordenadaIterada <= abs(alto)){
+		if(hayObstaculo(origenX, origenY + coordenadaIterada*signoCoordenadaIterada)) return false;
+		coordenadaIterada++;
+	}
+
+	return true;
+}
+
+bool Tablero::puedeRotar(const Pieza &p) const {
 	if(saleDeLosLimitesAlRotar(p)) return false;
 
 	return !chocaAlRotar(p);
 }
 
-bool Tablero::saleDeLosLimites(int coordenadaPicoHorizontal, int coordenadaPicoVertical){
+bool Tablero::puedeRotarEstrictamente(const Pieza &p) const {
+	if(saleDeLosLimitesAlRotar(p)) return false;
+
+	return !chocaAlRotar(p);
+}
+
+bool Tablero::saleDeLosLimites(int coordenadaPicoHorizontal, int coordenadaPicoVertical) const {
 	if(coordenadaPicoHorizontal < 0 || coordenadaPicoHorizontal >= n 
 		|| coordenadaPicoVertical < 0 || coordenadaPicoVertical >= n) 
 			return true;
 	else return false;
 }
 
-bool Tablero::saleDeLosLimitesAlRotar(const Pieza &p){
+bool Tablero::saleDeLosLimitesAlRotar(const Pieza &p) const {
 	int posibleNuevaX, posibleNuevaY;
     p.getCoordenadasRotacion(posibleNuevaX, posibleNuevaY);
 
@@ -91,14 +131,23 @@ bool Tablero::saleDeLosLimitesAlRotar(const Pieza &p){
 	return saleDeLosLimites(coordenadaPicoHorizontal, coordenadaPicoVertical);
 }
 
-bool Tablero::chocaAlRotar(const Pieza &p){
+bool Tablero::chocaAlRotar(const Pieza &p) const{
+	Pieza* copia = new Pieza(p);
+					copia->rotar();
+	bool posible =	posicionPosible(*copia);
+	delete copia;
+
+	return !posible;
+}
+
+bool Tablero::chocaAlRotarEstrictamente(const Pieza &p) const {
 	int posibleNuevaX, posibleNuevaY;
     p.getCoordenadasRotacion(posibleNuevaX, posibleNuevaY);
 
-	const int signoX = (p.getAncho() 			> 0) ? 1 : -1;
-	const int signoY = (p.getAlto() 			> 0) ? 1 : -1;
-	const int signoNuevaX = (posibleNuevaX 		> 0) ? 1 : -1;
-	const int signoNuevaY = (posibleNuevaY 		> 0) ? 1 : -1;
+	const int signoX 		= (p.getAncho() 		> 0) ? 1 : -1;
+	const int signoY 		= (p.getAlto() 			> 0) ? 1 : -1;
+	const int signoNuevaX 	= (posibleNuevaX 		> 0) ? 1 : -1;
+	const int signoNuevaY 	= (posibleNuevaY 		> 0) ? 1 : -1;
 
 	bool choca = false;
 	int dx, dy; // Se usara para calcular los limites del area encerrada al rotar
@@ -110,10 +159,10 @@ bool Tablero::chocaAlRotar(const Pieza &p){
 	while(!choca && dx <= abs(p.getAncho())){
 		dy = 1;
 		while(dy <= abs(p.getAncho())){
-			if(tableroFijo[p.getOrigenY() - signoNuevaY*dy] // Resto para orientar Y positivba hacia arriba (hacia menores valores en la matriz)
-							[p.getOrigenX() + signoX*dx] == CASILLA_MURO){
+			if(hayObstaculo(p.getOrigenX() + signoX*dx,
+				p.getOrigenY() + signoNuevaY*dy)){
 				choca = true;
-				std::cout << "[DEBUG]: Se detecta colision H->V en la casilla (x=" << p.getOrigenX() + signoX*dx << ", y=" << p.getOrigenY() - signoNuevaY*dy << std::endl;
+				std::cout << "[DEBUG]: Se detecta colision H->V en la casilla (x=" << p.getOrigenX() + signoX*dx << ", y=" << p.getOrigenY() + signoNuevaY*dy << std::endl;
 				break;
 			}
 			dy++;
@@ -127,10 +176,10 @@ bool Tablero::chocaAlRotar(const Pieza &p){
 	while(!choca && dx <= abs(p.getAlto())){
 		dy = 1;
 		while(dy <= abs(p.getAlto())){
-			if(tableroFijo[p.getOrigenY() - signoY*dy] // Resto para orientar Y positivba hacia arriba (hacia menores valores en la matriz)
-				[p.getOrigenX() + signoNuevaX*dx] == CASILLA_MURO){
+			if(hayObstaculo(p.getOrigenX() + signoNuevaX*dx,
+				p.getOrigenY() + signoY*dy)){
 				choca = true;
-				std::cout << "[DEBUG]: Se detecta colision V->H en la casilla (x=" << p.getOrigenX() + signoNuevaX*dx << ", y=" << p.getOrigenY() - signoY*dy << std::endl;
+				std::cout << "[DEBUG]: Se detecta colision V->H en la casilla (x=" << p.getOrigenX() + signoNuevaX*dx << ", y=" << p.getOrigenY() + signoY*dy << std::endl;
 				break;
 			}
 			dy++;
@@ -139,6 +188,34 @@ bool Tablero::chocaAlRotar(const Pieza &p){
 	}
 
     return choca;
+}
+
+bool Tablero::puedeMover(const Pieza &p, Pieza::Movimiento dir) const {
+	if(saleDeLosLimitesAlMover(p, dir)) return false;
+	return !chocaAlMover(p, dir);
+}
+
+bool Tablero::saleDeLosLimitesAlMover(const Pieza &p, Pieza::Movimiento dir) const {
+	if(Pieza::getTipoMovimiento(dir) == Pieza::TipoMovimiento::HORIZONTAL){
+		int posibleNuevoExtremoX1 = p.getOrigenX() + Pieza::getSignoMovimiento(dir);
+		int posibleNuevoExtremoX2 = posibleNuevoExtremoX1 + p.getAncho();
+		if((posibleNuevoExtremoX1 < 0 || posibleNuevoExtremoX1 >= n) || (posibleNuevoExtremoX2 < 0 || posibleNuevoExtremoX2 >= n))
+				return true; // Sale de los limites horizontales...
+			else return false; // No sale de los limites 
+	}else{
+		int posibleNuevoExtremoY1 = p.getOrigenY() + Pieza::getSignoMovimiento(dir);
+		int posibleNuevoExtremoY2 = posibleNuevoExtremoY1 + p.getAlto();
+		if((posibleNuevoExtremoY1 < 0 || posibleNuevoExtremoY1 >= n) || (posibleNuevoExtremoY2 < 0 || posibleNuevoExtremoY2 >= n))
+			return true; // Sale de los limites verticales...
+		else return false; // No sale de los limites
+	}
+}
+
+bool Tablero::chocaAlMover(const Pieza &p, Pieza::Movimiento dir) const {
+	Pieza* pt = p.getPiezaMovida(dir);
+	bool posible = posicionPosible(*pt);
+	delete pt;
+	return !posible;
 }
 
 void Tablero::dibujar(){
@@ -153,7 +230,6 @@ void Tablero::dibujar(){
 void Tablero::dibujar(const Pieza &p){
     limpiar();
 	aplicarPieza(p);
-    // aplicarObstaculos();
 	dibujar();
 }
 	

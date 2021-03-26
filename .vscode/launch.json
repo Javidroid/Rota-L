@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}\\ejecutable\\Rota-L.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}\\ejecutable",
             "environment": [],
             "console": "externalTerminal"
         }

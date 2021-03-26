@@ -9,7 +9,7 @@
 
 class LectorFicheroPuzle  {
 private:
-	static LectorFicheroPuzle * instancia;
+	static LectorFicheroPuzle * singleton;
 
 	int tamanoTablero;
 	Pieza * pieza;
@@ -20,7 +20,7 @@ private:
 
 	void identificarPieza();
 public:
-	static LectorFicheroPuzle * getInstancia();
+	static LectorFicheroPuzle * getSingleton();
 	~LectorFicheroPuzle();
 	Tablero* obtenerTablero();
 	Pieza* obtenerPieza();
