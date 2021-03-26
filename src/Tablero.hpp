@@ -33,13 +33,12 @@ public:
 
 	/**
 	 * Reestablece el tablero dinamico al tablero fijo
-	 * TODO: borrar
 	 */
 	void limpiar(); 
 
 	/**
 	 * Aplica la pieza dada al tablero dinamico
-	 * ENTRADA: p
+	 * @param p (ENTRADA)
 	 */
 	void aplicarPieza(const Pieza &p);
 
@@ -73,8 +72,10 @@ public:
 	 * Comprueba si la posicion y dimensiones actuales de la pieza se salen del tablero
 	 *  ! Es muy importante corregir esta posicion antes de hacer cualquier transformacion o evaluacion a la pieza !
 	 * 	NO deberia usarse para controlar que la pieza no este mal colocada inicialmente porque el enunciado supone que todos los ficheros son correctos
-	 * 	DEVUELVE: true si la pieza se saldria de los limites al aplicarse en el tablero; false en caso contrario
-	 * 	ENTRADA: coordenadaPicoHorizontal, coordenadaPicoVertical
+
+	 * @param coordenadaPicoHorizontal (ENTRADA) 
+	 * @param coordenadaPicoVertical (ENTRADA)
+	 * @return true si la pieza se saldria de los limites al aplicarse en el tablero; false en caso contrario
 	 */
 	bool saleDeLosLimites(int coordenadaPicoHorizontal, int coordenadaPicoVertical) const ;
 
@@ -82,30 +83,33 @@ public:
 	 * Comprueba que la pieza puede rotar hacia la derecha en la posicion en la que esta
 	 * Rotar sin evaluar previamente esta funcion puede dar lugar a estados incorrectos
 	 * 
-	 * DEVUELVE: true si la pieza puede rotarse en esa posicion; false en caso contrario
-	 * ENTRADA: p
+	 * @param p (ENTRADA)
+	 * @return true si la pieza puede rotarse en esa posicion; false en caso contrario
 	 */ 
 	bool puedeRotar(const Pieza &p) const ;
 
 	/**
 	 * @brief Comprueba que la pieza puede rotar sin encontrarse obstaculos de por medio
-	 * Rotar 
-	 * 
-	 * @param p (ENTRADA) Pieza a rot
-	 * @return true Si la pieza puede rotarse
-	 * @return false En caso contrario
+
+	 * @param p (ENTRADA)
+	 * @return true Si la pieza puede rotarse ; false en caso contrario
 	 */
 	bool puedeRotarEstrictamente(const Pieza &p) const ;
 		/**
 		 * Comprueba si la pieza se sale del tablero al rotar.
 		 * Continuar evaluando sin antes comprobar esta funcion puede dar lugar a accesos fuera de la matriz (violacion de segmento)
 		 * 
-		 * DEVUELVE: true si la pieza se sale de los limites si rota; false en caso contrario
-		 * 		 * ! Es muy importante que la pieza NO rote si esto devuelve true !
-		 * ENTRADA: p
+		 * @param p (ENTRADA)
+		 * @return true si la pieza se sale de los limites si rota (y no deberia hacerse ninguna otra evaluacion); false en caso contrario
 		 */
 		bool saleDeLosLimitesAlRotar(const Pieza &p) const ;
 
+		/**
+		 * Comprueba si la pieza va a estar en una posicion IMPOSIBLE al rotar
+		 * 
+		 * @param p (ENTRADA) La pieza en cuestion
+		 * @return true si la pieza choca al rotar ; false en caso contrario
+		 */
 		bool chocaAlRotar(const Pieza &p) const ;
 		/**
 		 *  Comprueba si la pieza colisiona con un muro al rotar
@@ -119,12 +123,26 @@ public:
 	
 	/**
 	 * Comprueba si la pieza puede moverse tantas veces en la direccion que se especifique.
-	 * DEVUELVE: true si el movimiento es posible; false en caso contrario
-	 * ENTRADA: p, dir, numeroCasillas
+	 * @param p (ENTRADA)
+	 * @param dir (ENTRADA)
+	 * @return true si el movimiento es posible; false en caso contrario
 	 */
 	bool puedeMover(const Pieza &p, Pieza::Movimiento dir) const ;
 
+		/**
+	 	* Comprueba si la pieza se saldria de los limites al moverse en la direccion especificada
+	 	* @param p (ENTRADA)
+	 	* @param dir (ENTRADA)
+	 	* @return true si la pieza va a salir de los limites (y no deberia hacerse ninguna otra evaluacion); false en caso contrario
+		 */		
 		bool saleDeLosLimitesAlMover(const Pieza &p, Pieza::Movimiento dir) const ;
+
+		/**
+	 	* Comprueba si la pieza va a estar en una posicion IMPOSIBLE al moverse.
+		* @param p (ENTRADA)
+		* @param dir (ENTRADA)
+	 	* @return true si colisiona al moverse; false en caso contrario
+	 	*/		
 		bool chocaAlMover(const Pieza &p, Pieza::Movimiento dir) const ;
 	
 	/**
@@ -135,7 +153,7 @@ public:
 
 	/**
 	 * Dibuja el tablero con sus obstaculos, la pieza y la meta. No necesita llamadas previas
-	 * ENTRADA: p
+	 * @param p (ENTRADA) La pieza que va a ser dibujada en el tablero
 	 */
 	void dibujar(const Pieza &p);
 
