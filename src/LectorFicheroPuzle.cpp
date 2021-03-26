@@ -22,6 +22,7 @@ LectorFicheroPuzle::LectorFicheroPuzle(){
 			}
 		}
 		in.close();
+		std::cout << "Fichero leido correctamente ;)" << std::endl;
 	}else{
 		std::cout << "[ERROR]: No se ha podido leer " << FICHERO_PUZLE_NOMBRE << std::endl;
 		std::terminate();
@@ -67,7 +68,9 @@ void LectorFicheroPuzle::identificarPieza(){
 	}
 
 	if(!paloHorizontalEncontrado){
+#ifdef DEBUG
 		std::cout << "[DEBUG] El palo horizontal de la L no se ha encontrado. Tablero incorrecto ??" << std::endl;
+#endif
 		std::terminate();
 	}
 	// Una vez encontrado el palo horizontal buscar el vertical evaluando solo las partes superiores/inferiores de ese
@@ -87,11 +90,15 @@ void LectorFicheroPuzle::identificarPieza(){
 	}
 
 	if(coordenadaPaloVertical == -1){
+#ifdef DEBUG
 		std::cout << "[DEBUG] El palo vertical de la L no se ha encontrado. Tablero incorrecto ?? x=" << coordenadaPaloHorizontal << std::endl;
+#endif
 		std::terminate();
 	}
 
+#ifdef DEBUG
 	std::cout << "[DEBUG] Se ha encontrado el vertice de la pieza en: (x=" << coordenadaPaloVertical << ", y=" << coordenadaPaloHorizontal << ')' << std::endl;
+#endif
 	
 	// Una vez encontrado el vertice, determinar el ancho y alto de la pieza
 	
@@ -119,10 +126,11 @@ void LectorFicheroPuzle::identificarPieza(){
 	pieza = new Pieza(coordenadaPaloVertical, coordenadaPaloHorizontal,
 						anchoPieza, altoPieza);
 
+#ifdef DEBUG
 	// DEBUG: indicar pieza
 	std::cout << "[DEBUG] Se ha encontrado una pieza en (x=" << coordenadaPaloVertical << ", y=" << coordenadaPaloHorizontal << ")\n"
 				<< "\tAncho: " << anchoPieza << " | Alto: " << altoPieza << std::endl;					
-
+#endif
 }
 
 void LectorFicheroPuzle::cargarTableroPrueba(){
