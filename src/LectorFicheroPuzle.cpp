@@ -1,4 +1,8 @@
-#include "LectorFicheroPuzle.hpp"  
+#include "LectorFicheroPuzle.hpp"
+#include <iostream>
+
+using namespace std;
+
 LectorFicheroPuzle * LectorFicheroPuzle::singleton = nullptr;
 
 LectorFicheroPuzle *LectorFicheroPuzle::getSingleton(){
@@ -30,7 +34,8 @@ LectorFicheroPuzle::LectorFicheroPuzle(){
 
 	// Preparar los elementos Tablero y Pieza que se obtienen con los getters
 	tablero = new Tablero(tamanoTablero, tableroLeido);
-	identificarPieza();	
+	pieza = identificarPieza(CASILLA_PIEZA);
+	objetivo = identificarPieza(CASILLA_META);
 }
 
 Tablero* LectorFicheroPuzle::obtenerTablero(){
@@ -42,7 +47,11 @@ Pieza* LectorFicheroPuzle::obtenerPieza(){
 	return pieza;
 }
 
-void LectorFicheroPuzle::identificarPieza(){
+Pieza* LectorFicheroPuzle::obtenerObjetivo(){
+	return objetivo;
+}
+
+Pieza* LectorFicheroPuzle::identificarPieza(int tipoPieza){
 	int coordenadaPaloHorizontal = -1, // Sera la coordenada Y del vertice (el palo horizontal puede disponerse en parte superior / inferior)
 		coordenadaPaloVertical = -1;   // Sera la coordenada X del vertice (el palo vertical puede disponerse en parte izq / der)
 
@@ -57,7 +66,7 @@ void LectorFicheroPuzle::identificarPieza(){
 	bool paloHorizontalEncontrado = false; // paloHorizontalEncontrado sii (coordenadaPaloHorizontal != -1)
 	for(int i = 1; !paloHorizontalEncontrado && i < tamanoTablero-1; i++){
 		for(int j = 1; !paloHorizontalEncontrado && j < tamanoTablero-1; j++){
-			if(tableroLeido[i][j] == CASILLA_PIEZA && tableroLeido[i][j+1] == CASILLA_PIEZA){
+			if(tableroLeido[i][j] == tipoPieza && tableroLeido[i][j+1] == tipoPieza){
 				// Se ha encontrado el palo horizontal
 				coordenadaPaloHorizontal = i; // Fila donde esta el palo horizontal
 				coordenadaPrimeraPorcionPaloHorizontal = j; // Columna de la parte izquierda del palo horizontal
@@ -76,10 +85,10 @@ void LectorFicheroPuzle::identificarPieza(){
 	// Una vez encontrado el palo horizontal buscar el vertical evaluando solo las partes superiores/inferiores de ese
 	int candidatoCoordenadaPaloVertical = coordenadaPrimeraPorcionPaloHorizontal;
 	while(tableroLeido[coordenadaPaloHorizontal]	// Mantenerse en la misma fila: coordenada palo horizontal
-					  [candidatoCoordenadaPaloVertical] == CASILLA_PIEZA){	// Ir comprobando las columnas: distintas coordenadas palo vertical
+					  [candidatoCoordenadaPaloVertical] == tipoPieza){	// Ir comprobando las columnas: distintas coordenadas palo vertical
 
-		if(tableroLeido[coordenadaPaloHorizontal-1][candidatoCoordenadaPaloVertical] == CASILLA_PIEZA || // Hay mas pieza arriba ??
-							tableroLeido[coordenadaPaloHorizontal+1][candidatoCoordenadaPaloVertical] == CASILLA_PIEZA){ // Hay mas pieza abajo ??
+		if(tableroLeido[coordenadaPaloHorizontal-1][candidatoCoordenadaPaloVertical] == tipoPieza || // Hay mas pieza arriba ??
+							tableroLeido[coordenadaPaloHorizontal+1][candidatoCoordenadaPaloVertical] == tipoPieza){ // Hay mas pieza abajo ??
 			// Se ha encontrado el palo vertical: es candidatoCoordenadaPaloVertical (coordenada X del vertice)
 			coordenadaPaloVertical = candidatoCoordenadaPaloVertical;
 			break;
@@ -104,26 +113,26 @@ void LectorFicheroPuzle::identificarPieza(){
 	
 	// Determinar ancho
 		// Determinar signo de ancho
-		int signoAncho = (tableroLeido[coordenadaPaloHorizontal][coordenadaPaloVertical+1] == CASILLA_PIEZA) ? 1 : -1;
+		int signoAncho = (tableroLeido[coordenadaPaloHorizontal][coordenadaPaloVertical+1] == tipoPieza) ? 1 : -1;
 		// Explorar ancho de la pieza
 		int indiceAncho = 0;
-		while(tableroLeido[coordenadaPaloHorizontal][coordenadaPaloVertical + indiceAncho] == CASILLA_PIEZA){
+		while(tableroLeido[coordenadaPaloHorizontal][coordenadaPaloVertical + indiceAncho] == tipoPieza){
 			indiceAncho += signoAncho;
 		}
 	anchoPieza = indiceAncho - signoAncho; // Como el indice contiene la casilla SIGUIENTE a la ultima, quitar una casilla
 
 	// Determinar alto
 		// Determinar signo de alto
-		int signoAlto = (tableroLeido[coordenadaPaloHorizontal+1][coordenadaPaloVertical] == CASILLA_PIEZA) ? 1 : -1;
+		int signoAlto = (tableroLeido[coordenadaPaloHorizontal+1][coordenadaPaloVertical] == tipoPieza) ? 1 : -1;
 		// Explorar alto de la pieza
 		int indiceAlto = 0;
-		while(tableroLeido[coordenadaPaloHorizontal + indiceAlto][coordenadaPaloVertical] == CASILLA_PIEZA){
+		while(tableroLeido[coordenadaPaloHorizontal + indiceAlto][coordenadaPaloVertical] == tipoPieza){
 			indiceAlto += signoAlto;
 		}
 	altoPieza = indiceAlto - signoAlto; // Como el indice contiene la casilla SIGUIENTE a la ultima, quitar una casilla
 
 	// Pieza identificada completamente. Construir
-	pieza = new Pieza(coordenadaPaloVertical, coordenadaPaloHorizontal,
+	return new Pieza(coordenadaPaloVertical, coordenadaPaloHorizontal,
 						anchoPieza, altoPieza);
 
 #ifdef DEBUG

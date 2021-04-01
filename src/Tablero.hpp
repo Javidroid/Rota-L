@@ -4,9 +4,9 @@
 #ifndef TABLERO_H
 #define TABLERO_H
 
-#include "Pieza.hpp"
 #include <cmath>
 #include <iostream>
+#include "Pieza.hpp"
 
 
 #define TABLERO_TAM 10 // Capacidad del tablero: TABLERO_TAM * TABLERO_TAM casillas
@@ -23,6 +23,7 @@ private:
 	int n;
 	tableroMatriz tableroFijo; // Contiene la disposicion de los obstaculos cargada al leer el fichero.
 	tableroMatriz tableroDibujable; // Se dibujaran las posicion de L y META en este tablero (borrar)
+	Pieza *objetivo;
 public:
 	Tablero(int tam);
 	Tablero(int tam, tableroMatriz matriz);
@@ -156,6 +157,10 @@ public:
 	 * @param p (ENTRADA) La pieza que va a ser dibujada en el tablero
 	 */
 	void dibujar(const Pieza &p);
+
+	void setObjetivo(Pieza* p);
+
+	int h(const Pieza &p);
 
 
 };

@@ -3,25 +3,37 @@
 #include "Tablero.hpp"
 #include "Pieza.hpp"
 #include "LectorFicheroPuzle.hpp"
+#include "algoritmos/Aestrella.hpp"
 
 #include <fstream>
+#include <ctime>
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {	
-	/**
-	 * PRUEBA DE IDENTIFICADOR DE PIEZA
-	 * ( El constructor de LectorFicheroPuzle no debe ponerse a leer ningun fichero )
-	 **/
+	unsigned t0, t1;
+	t0 = clock();
+
 	LectorFicheroPuzle * lec = LectorFicheroPuzle::getSingleton();
 		Pieza* p = lec->obtenerPieza();
 		Tablero *t = lec->obtenerTablero();
-	delete lec;
+		t->setObjetivo(lec->obtenerObjetivo());
+		algoritmos::Aestrella* a = new algoritmos::Aestrella(t,p);
+	delete lec; // Ya no es necesario el lector de ficheros
+
+	//MODO AUTOMATICO
+	a->Principal();
+	delete a;
+
+	t1 = clock();
+	double time = (double(t1-t0)/CLOCKS_PER_SEC);
+	cout<<endl<<"Tiempo de ejecucion: "<<time<<" segundos";
 
 	/**
 	 * MODO INTERACTIVO
 	 */
+	/**
 	cout << "=========================================" << endl;
 	cout << "===========[MODO INTERACTIVO]============" << endl;
 	cout << "=========================================" << endl;
@@ -61,6 +73,7 @@ int main(int argc, char *argv[])
 				p->rotar();
 		}else cout << "Adios :(" << endl;
 	}
+	*/
 
 	return 0;
 }

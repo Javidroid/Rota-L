@@ -8,6 +8,7 @@
 			"args": [
 				"-g",
 				"${workspaceFolder}\\src\\*.cpp",
+				"${workspaceFolder}\\src\\algoritmos\\*.cpp",
 				"-O3",
 				"-static",
 				"-o",

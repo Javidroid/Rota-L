@@ -18,10 +18,12 @@ Tablero::Tablero(int tam){
         tableroFijo[i][n-1] = CASILLA_MURO;
         tableroFijo[n-1][i] = CASILLA_MURO;
     }
+    objetivo = nullptr;
 }
 
 Tablero::Tablero(int tam, tableroMatriz matriz){
 	n = tam;
+	objetivo = nullptr;
     // Copiar matriz
     for(int i = 0; i < n; i++)
 	    for(int j = 0; j < n; j++)
@@ -232,5 +234,18 @@ void Tablero::dibujar(const Pieza &p){
 	aplicarPieza(p);
 	dibujar();
 }
+
+void Tablero::setObjetivo(Pieza* p){
+	objetivo = p;
+}
+
+int Tablero::h(const Pieza &p){
+	int h = abs(p.getOrigenX()-objetivo->getOrigenX()) + abs(p.getOrigenY() - objetivo->getOrigenY());
+	if(h == 0){
+		if(p.getAncho() == objetivo->getAncho()) h = 0;
+		else h = 1;
+	}
+	return h;
+}
 	
-Tablero::~Tablero(){}
+Tablero::~Tablero(){delete objetivo;}

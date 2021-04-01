@@ -2,6 +2,7 @@
 #define LECTORFICHEROPUZLE_H
 
 #include <fstream>
+
 #include "Pieza.hpp"
 #include "Tablero.hpp"
 
@@ -13,17 +14,19 @@ private:
 
 	int tamanoTablero;
 	Pieza * pieza;
+	Pieza * objetivo;
 	tableroMatriz tableroLeido;
 	Tablero * tablero;
 
 	LectorFicheroPuzle();
 
-	void identificarPieza();
+	Pieza* identificarPieza(int tipoPieza);
 public:
 	static LectorFicheroPuzle * getSingleton();
 	~LectorFicheroPuzle();
 	Tablero* obtenerTablero();
 	Pieza* obtenerPieza();
+	Pieza* obtenerObjetivo();
 	void cargarTableroPrueba();
 
 };
