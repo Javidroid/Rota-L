@@ -100,8 +100,8 @@ void MenuPrincipal::modoInteractivo(){
     }
 
 void MenuPrincipal::resolucionAestrella(){
-	
-	algoritmos::Aestrella* aestrella = new algoritmos::Aestrella(t, p);
+	Pieza* piezaAlgoritmo = new Pieza(*p);
+	algoritmos::Aestrella* aestrella = new algoritmos::Aestrella(t, piezaAlgoritmo);
 	unsigned int t0 = clock();
 	{
 		aestrella->Principal();
@@ -114,8 +114,8 @@ void MenuPrincipal::resolucionAestrella(){
 }
 
 void MenuPrincipal::resolucionPrimeroMejor(){
-	
-	algoritmos::PrimeroMejor* primeroMejor = new algoritmos::PrimeroMejor(t, p);
+	Pieza* piezaAlgoritmo = new Pieza(*p);
+	algoritmos::PrimeroMejor* primeroMejor = new algoritmos::PrimeroMejor(t, piezaAlgoritmo);
 	unsigned int t0 = clock();
 	{
 		primeroMejor->Principal();
