@@ -23,12 +23,15 @@ void MenuPrincipal::abrirMenu(){
 		}
 		sel = elegirOpcion();
 		switch(sel){
-			case Seleccion::INTERACTIVO: modoInteractivo(); 
-										 bNecesarioMostrarInfo = true;
-										 break;
-			case Seleccion::AESTRELLA:	 resolucionAestrella(); 
-										 bNecesarioMostrarInfo = true; 
-										 break;
+			case Seleccion::INTERACTIVO: 	 modoInteractivo(); 
+										 	 bNecesarioMostrarInfo = true;
+										 	 break;
+			case Seleccion::AESTRELLA:	 	 resolucionAestrella(); 
+										 	 bNecesarioMostrarInfo = true; 
+										 	 break;
+			case Seleccion::PRIMERO_MEJOR:	 resolucionPrimeroMejor(); 
+										 	 bNecesarioMostrarInfo = true; 
+										 	 break;
 			
 		}
 	}while(sel != Seleccion::SEL_INVALIDA);
@@ -42,14 +45,16 @@ void MenuPrincipal::mostrarinfo(){
 
     cout << '[' << MENU_OPCION_INTERACTIVO << "] Resolver manualmente" << endl;
     cout << '[' << MENU_OPCION_AESTRELLA << "] Resolver automaticamente con A*" << endl;
+	cout << '[' << MENU_OPCION_PRIMEROMEJOR << "] Resolver automaticamente con PRIMERO MEJOR" << endl;
 }
     
 MenuPrincipal::Seleccion MenuPrincipal::elegirOpcion(){
     int decision;
     cin >> decision;
     switch(decision){
-        case MENU_OPCION_INTERACTIVO:   return Seleccion::INTERACTIVO;
-        case MENU_OPCION_AESTRELLA:     return Seleccion::AESTRELLA;
+        case MENU_OPCION_INTERACTIVO:   	return Seleccion::INTERACTIVO;
+        case MENU_OPCION_AESTRELLA:     	return Seleccion::AESTRELLA;
+		case MENU_OPCION_PRIMEROMEJOR:     return Seleccion::PRIMERO_MEJOR;
         default:    break;
     }
     return Seleccion::SEL_INVALIDA;
@@ -104,6 +109,20 @@ void MenuPrincipal::resolucionAestrella(){
 	unsigned int t1 = clock();
 
 	delete aestrella;
+	double time = (double(t1-t0)/CLOCKS_PER_SEC);
+	cout<<endl<<"Tiempo de ejecucion: "<<time<<" segundos";
+}
+
+void MenuPrincipal::resolucionPrimeroMejor(){
+	
+	algoritmos::PrimeroMejor* primeroMejor = new algoritmos::PrimeroMejor(t, p);
+	unsigned int t0 = clock();
+	{
+		primeroMejor->Principal();
+	}
+	unsigned int t1 = clock();
+
+	delete primeroMejor;
 	double time = (double(t1-t0)/CLOCKS_PER_SEC);
 	cout<<endl<<"Tiempo de ejecucion: "<<time<<" segundos";
 }

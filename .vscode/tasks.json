@@ -4,9 +4,8 @@
 		{
 			"type": "cppbuild",
 			"label": "C/C++: g++.exe compilar archivo activo",
-			"command": "C:\\MinGW\\bin\\g++.exe",
+			"command": "D:\\Programas\\MinGW\\bin\\g++.exe",
 			"args": [
-				"-g",
 				"${workspaceFolder}\\src\\*.cpp",
 				"${workspaceFolder}\\src\\algoritmos\\*.cpp",
 				"${workspaceFolder}\\src\\menu\\*.cpp",
@@ -16,13 +15,13 @@
 				"${workspaceFolder}\\ejecutable\\Rota-L.exe",
 			],
 			"options": {
-				"cwd": "C:\\MinGW\\bin"
+				"cwd": "D:\\Programas\\MinGW\\bin"
 			},
 			"problemMatcher": [
 				"$gcc"
 			],
 			"group": "build",
-			"detail": "compilador: C:\\MinGW\\bin\\g++.exe"
+			"detail": "compilador: xd"
 		}
 	]
 }

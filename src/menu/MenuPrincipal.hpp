@@ -3,6 +3,7 @@
 
 #define MENU_OPCION_INTERACTIVO 0
 #define MENU_OPCION_AESTRELLA 1
+#define MENU_OPCION_PRIMEROMEJOR 2
 
 #include <iostream>
 #include <ctime>
@@ -13,13 +14,14 @@
 #include "../LectorFicheroPuzle.hpp"
 
 #include "../algoritmos/Aestrella.hpp"
+#include "../algoritmos/PrimeroMejor.hpp"
 
 using namespace std;
 
 class MenuPrincipal{
 public:
     enum class Seleccion{
-        AESTRELLA, INTERACTIVO,
+        AESTRELLA, INTERACTIVO, PRIMERO_MEJOR,
         SEL_INVALIDA
     };
 private:
@@ -31,6 +33,7 @@ private:
 
     void modoInteractivo();
     void resolucionAestrella();
+    void resolucionPrimeroMejor();
 public:
     MenuPrincipal();
     ~MenuPrincipal();
