@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main(int argc, char *argv[])
+int main()
 {	
 	MenuPrincipal m;
 	m.abrirMenu();
