@@ -47,7 +47,6 @@ namespace algoritmos
 			delete n;
 		}
 		delete expandidos;
-		delete t;
 	}
 
 	bool Aestrella::compare(const Nodo *first, const Nodo *second)

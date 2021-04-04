@@ -215,6 +215,5 @@ namespace algoritmos
 			delete n;
 		}
 		delete expandidos;
-		delete t;
 	}
 }
