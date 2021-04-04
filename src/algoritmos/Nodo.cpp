@@ -92,4 +92,16 @@ void Nodo::mostrar(){
 	}
 	cout<<id<<"(^"<<idPadre<<","<<h<<"+"<<coste<<")";
 }
+
+void Nodo::mostrarPM(){
+	string idPadre;
+	if(padre != nullptr){
+		idPadre = to_string(padre->getId());
+	}
+	else{
+		idPadre = "null";
+	}
+	cout<<id<<"(^"<<idPadre<<","<<h<<")";
+}
+
 }
