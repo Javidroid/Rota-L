@@ -9,6 +9,7 @@
 				"-g",
 				"${workspaceFolder}\\src\\*.cpp",
 				"${workspaceFolder}\\src\\algoritmos\\*.cpp",
+				"${workspaceFolder}\\src\\menu\\*.cpp",
 				"-O3",
 				"-static",
 				"-o",
