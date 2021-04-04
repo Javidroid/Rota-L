@@ -1,17 +1,20 @@
 /*
  * Aestrella.cpp
- *
- *  Created on: 28 mar. 2021
- *      Author: alumno
+ * 
+ * Implementacion de la clase Aestrella
+ * @author Raúl Alvarado Díaz
+ * @author Javier Florido Cartolano
+ * @author Iván Sánchez Cordero
  */
+
 #include "Aestrella.hpp"
 using namespace std;
-
 namespace algoritmos{
 	Aestrella::Aestrella() {
 	colaExpansion = new list<Nodo*>();
 	expandidos = new list<Nodo*>();
 	t = nullptr;
+	solucion = nullptr;
 	num = 1;
 }
 
@@ -20,6 +23,7 @@ Aestrella::Aestrella(Tablero *t, Pieza *p){
 	expandidos = new list<Nodo*>();
 	this->t = t;
 	colaExpansion->push_back(new Nodo(p,t->h(*p)));
+	solucion = nullptr;
 	num = 1;
 }
 
@@ -30,16 +34,14 @@ Aestrella::~Aestrella() {
 		colaExpansion->pop_front();
 		delete n;
 	}
+	delete colaExpansion;
 	while(!expandidos->empty()){
 		n = expandidos->front();
 		expandidos->pop_front();
 		delete n;
 	}
-	delete t;
-
-	// Borrar las estructuras de datos
-	delete colaExpansion;
 	delete expandidos;
+	delete t;
 }
 
 bool Aestrella::compare(const Nodo * first, const Nodo * second){
@@ -48,7 +50,7 @@ bool Aestrella::compare(const Nodo * first, const Nodo * second){
 	return (n1->getH()+  n1->getCoste()) < (n2->getH()+n2->getCoste());
 }
 
-bool Aestrella::expandir(Nodo* n){
+void Aestrella::expandir(Nodo* n){
 	Pieza * p = n->getEstado();
 	Pieza *aux = nullptr;
 	Nodo *nuevo;
@@ -96,7 +98,7 @@ bool Aestrella::expandir(Nodo* n){
 				colaExpansion->push_back(nuevo);
 				num ++;
 				if(t->h(*aux) == 0){
-					return true;
+					solucion = nuevo;
 				}
 			}
 			else{
@@ -104,7 +106,6 @@ bool Aestrella::expandir(Nodo* n){
 			}
 		}
 	}
-	return false;
 }
 
 
@@ -115,13 +116,16 @@ void Aestrella::Principal(){
 		using namespace std::placeholders;
 		colaExpansion->sort(std::bind(&Aestrella::compare,this,_1,_2));
 		mostrarTodo();
-		if(expandir(colaExpansion->front())){
+
+
+		if(solucion != nullptr){
 			fin = true;
 			string s = "";
-			pasosSeguidos(colaExpansion->back(),s);
+			pasosSeguidos(solucion,s);
 			cout<<s;
 		}
 		else{
+			expandir(colaExpansion->front());
 			n = colaExpansion->front();
 			colaExpansion->pop_front();
 			expandidos->push_back(n);
@@ -146,11 +150,12 @@ bool Aestrella::repetido(Nodo* n){
 		aux = n2->getEstado();
 		if(*p==*aux){
 			encontrado = true;
-			if(n2->getCoste() < n->getCoste()){
-				n->setCoste(n2->getCoste());
-				n->setMovimiento(n2->getMovimiento());
-				n->setPadre(n2->getPadre());
-				cambiarCostesHijos(n);
+			if(n->getCoste() < n2->getCoste()){
+				cout<<"El coste del nodo "<<n2->getId()<<" ha pasado de ser "<<n2->getCoste()<<" a "<<n->getCoste()<<endl;
+				n2->setCoste(n->getCoste());
+				n2->setMovimiento(n->getMovimiento());
+				n2->setPadre(n->getPadre());
+				cambiarCostesHijos(n2);
 			}
 		}
 	}
@@ -159,11 +164,12 @@ bool Aestrella::repetido(Nodo* n){
 		aux = n2->getEstado();
 		if(*p==*aux){
 			encontrado = true;
-			if(n2->getCoste() < n->getCoste()){
-				n->setCoste(n2->getCoste());
-				n->setMovimiento(n2->getMovimiento());
-				n->setPadre(n2->getPadre());
-				cambiarCostesHijos(n);
+			if(n->getCoste() < n2->getCoste()){
+				cout<<"El coste del nodo "<<n2->getId()<<" ha pasado de ser "<<n2->getCoste()<<" a "<<n->getCoste()<<endl;
+				n2->setCoste(n->getCoste());
+				n2->setMovimiento(n->getMovimiento());
+				n2->setPadre(n->getPadre());
+				cambiarCostesHijos(n2);
 			}
 		}
 	}
@@ -182,6 +188,7 @@ void Aestrella::cambiarCostesHijos(Nodo* n){
 	for(list<Nodo*>::iterator it = colaExpansion->begin(); it != colaExpansion->end() ; it++){
 		n2 = *it;
 		if(n2->getPadre() == n){
+			cout<<"El coste del nodo "<<n2->getId()<<" ha pasado de ser "<<n2->getCoste()<<" a"<<n->getCoste()+1<<endl;
 			n2->setCoste(n->getCoste()+1);
 			cambiarCostesHijos(n2);
 		}
@@ -189,6 +196,7 @@ void Aestrella::cambiarCostesHijos(Nodo* n){
 	for(list<Nodo*>::iterator it = expandidos->begin(); it != expandidos->end() ; it++){
 		n2 = *it;
 		if(n2->getPadre() == n){
+			cout<<"El coste del nodo "<<n2->getId()<<" ha pasado de ser "<<n2->getCoste()<<" a"<<n->getCoste()+1<<endl;
 			n2->setCoste(n->getCoste()+1);
 			cambiarCostesHijos(n2);
 		}

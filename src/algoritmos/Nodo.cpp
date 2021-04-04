@@ -1,9 +1,12 @@
 /*
  * Nodo.cpp
- *
- *  Created on: 28 mar. 2021
- *      Author: alumno
+ * 
+ * Implementacion de la clase Nodo
+ * @author Raúl Alvarado Díaz
+ * @author Javier Florido Cartolano
+ * @author Iván Sánchez Cordero
  */
+
 #include "Nodo.hpp"
 
 using namespace std;

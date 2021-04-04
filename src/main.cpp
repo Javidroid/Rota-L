@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 {	
 	unsigned t0, t1;
 	t0 = clock();
-
+	
 	LectorFicheroPuzle * lec = LectorFicheroPuzle::getSingleton();
 		Pieza* p = lec->obtenerPieza();
 		Tablero *t = lec->obtenerTablero();
